@@ -13,7 +13,12 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
             <head>
               <meta property="fc:frame" content="vNext" />
               <meta property="fc:frame:image" content="${SUCCESS_CLAIM_IMAGE_URL}" />
-              <meta name="fc:frame:button:1" content="${inputText} ${fid}" />
+              <meta name="fc:frame:button:1" content="You are ${inputText} with FID, Next?" />
+              <meta name="fc:frame:button:1:action" content="post" />
+              <meta name="fc:frame:button:1:target" content="https://frame-demo-seven.vercel.app/api/frame-2" />
+              <meta name="fc:frame:button:2" content="Airstack Link" />
+              <meta name="fc:frame:button:2:action" content="link" />
+              <meta name="fc:frame:button:2:target" content="https://airstack.xyz" />
           </head>
         </html>
     `);
