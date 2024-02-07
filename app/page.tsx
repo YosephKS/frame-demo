@@ -3,7 +3,10 @@ import type { Metadata } from 'next';
 import { INITIAL_IMAGE_URL } from './lib/constants';
 
 const frameMetadata = getFrameMetadata({
-  buttons: ['mint airstack 🤝 zora'],
+  buttons: [
+    { label: 'Click to POST', action: 'post' },
+    { label: 'Redirect', action: 'post_redirect' },
+  ],
   image: INITIAL_IMAGE_URL,
   post_url: 'https://frame-demo-seven.vercel.app/api/frame',
 });
@@ -14,6 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'frame.airstack.xyz',
     description: 'airstack 🤝 zora',
+    images: INITIAL_IMAGE_URL,
   },
   other: {
     ...frameMetadata,
