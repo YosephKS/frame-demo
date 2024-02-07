@@ -4,19 +4,22 @@ import { INITIAL_IMAGE_URL } from './lib/constants';
 
 const frameMetadata = getFrameMetadata({
   buttons: [
-    { label: 'Click to POST', action: 'post' },
-    { label: 'Redirect', action: 'post_redirect' },
+    { label: 'Fetch Your Onchain Data', action: 'post' },
+    { label: 'Go to Airstack Explorer', action: 'post_redirect' },
   ],
   image: INITIAL_IMAGE_URL,
   post_url: 'https://frame-demo-seven.vercel.app/api/frame',
+  input: {
+    text: 'Type your Farcaster fname here!',
+  },
 });
 
 export const metadata: Metadata = {
-  title: 'frame.airstack.xyz',
-  description: 'airstack 🤝 zora',
+  title: 'Airstack Frames',
+  description: 'Testing new Airstack Frames here',
   openGraph: {
-    title: 'frame.airstack.xyz',
-    description: 'airstack 🤝 zora',
+    title: 'Airstack Frames',
+    description: 'Testing new Airstack Frames here',
     images: INITIAL_IMAGE_URL,
   },
   other: {
@@ -27,7 +30,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <h1>frame.airstack.xyz</h1>
+      <h1>Airstack Frames</h1>
     </>
   );
 }
