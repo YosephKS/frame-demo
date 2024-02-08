@@ -25,7 +25,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const { fid } = body?.untrustedData ?? {};
   const upFid = (fid + 1).toString();
   const downFid = (fid - 1).toString();
-  const res = await fetchQuery(query, { upFid, downFid });
+  const res = await fetchQuery(query, { upFid: '1', downFid: '3' });
   const { data, error } = res;
   console.log(res);
   if (!error) {
