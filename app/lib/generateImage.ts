@@ -4,6 +4,7 @@ import { html } from 'satori-html';
 import puppeteer from 'puppeteer';
 import { ThirdwebStorage } from '@thirdweb-dev/storage';
 import { config } from 'dotenv';
+import ttf from './Roboto/Roboto-Black.ttf';
 
 config();
 
@@ -37,7 +38,7 @@ const generateImage = async (data: any) => {
       fonts: [
         {
           name: 'Roboto',
-          data: await fs.readFile(process.cwd() + '/app/lib/Roboto/Roboto-Black.ttf'),
+          data: ttf,
           weight: 400,
           style: 'normal',
         },
