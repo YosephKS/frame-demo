@@ -25,12 +25,12 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const { fid } = body?.untrustedData ?? {};
   const upFid = (fid + 1).toString();
   const downFid = (fid - 1).toString();
-  const { data, error } = await fetchQuery(query, { upFid, downFid });
-  console.log(data, error, fid);
+  const res = await fetchQuery(query, { upFid, downFid });
+  const { data, error } = res;
+  console.log(res);
   if (!error) {
     const up = data?.up?.Social?.[0]?.profileName;
     const down = data?.down?.Social?.[0]?.profileName;
-    console.log(data);
     return new NextResponse(`
         <!DOCTYPE html>
           <html>
