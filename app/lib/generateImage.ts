@@ -1,7 +1,7 @@
 import { readFile } from 'fs/promises';
 import satori from 'satori';
 import { html } from 'satori-html';
-import sharp from 'sharp';
+import svg2png from 'svg2png';
 import { ThirdwebStorage } from '@thirdweb-dev/storage';
 import { config } from 'dotenv';
 
@@ -42,7 +42,8 @@ const generateImage = async (data: any) => {
     ],
   });
 
-  const pngBuffer = await sharp(svg).png().toBuffer();
+  // @ts-ignore
+  const pngBuffer = await svg2png(svg);
   return pngBuffer;
 };
 
