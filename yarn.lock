@@ -2635,7 +2635,7 @@
     "string-env-interpolation" "^1.0.1"
     "tslib" "^2.4.0"
 
-"graphql-request@^6.0.0":
+"graphql-request@^6.0.0", "graphql-request@^6.1.0":
   "integrity" "sha512-p+XPfS4q7aIpKVcgmnZKhMNqhltk20hfXtkaIkTfjjmiKMJ5xrt5c743cL03y/K7y1rg3WrIC49xGiEQ4mxdNw=="
   "resolved" "https://registry.npmjs.org/graphql-request/-/graphql-request-6.1.0.tgz"
   "version" "6.1.0"
