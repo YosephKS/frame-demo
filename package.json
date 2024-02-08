@@ -12,7 +12,7 @@
     "predev": "yarn generate"
   },
   "keywords": [],
-  "author": "@limone-eth",
+  "author": "@yosephks",
   "license": "MIT",
   "dependencies": {
     "@airstack/node": "^0.0.5",
