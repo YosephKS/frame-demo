@@ -1,7 +1,7 @@
 import { readFile } from 'fs/promises';
 import satori from 'satori';
 import { html } from 'satori-html';
-import { Resvg } from '@resvg/resvg-js';
+import sharp from 'sharp';
 import { ThirdwebStorage } from '@thirdweb-dev/storage';
 import { config } from 'dotenv';
 
@@ -42,11 +42,7 @@ const generateImage = async (data: any) => {
     ],
   });
 
-  const resvg = new Resvg(svg, {
-    background: 'rgba(238, 235, 230, .9)',
-  });
-  const pngData = resvg.render();
-  const pngBuffer = pngData.asPng();
+  const pngBuffer = await sharp(svg).png().toBuffer();
   return pngBuffer;
 };
 
