@@ -1,10 +1,8 @@
-import { promises as fs } from 'fs';
 import satori from 'satori';
 import { html } from 'satori-html';
 import puppeteer from 'puppeteer';
 import { ThirdwebStorage } from '@thirdweb-dev/storage';
 import { config } from 'dotenv';
-import ttf from './Roboto/Roboto-Black.ttf';
 
 config();
 
@@ -31,6 +29,13 @@ const generateImage = async (data: any) => {
     <div style="display: flex;">Powered by<img width="130px" src="https://assets-global.website-files.com/625f12b8c305bac86b872acd/64d0940ab6c6593d16483399_Airstack-logo-RGB%20-%20dark%20mode%20without%20padding.svg" style="margin-left: 12px;" /></div>
   </div>`);
 
+    const robotoMono400 = fetch(
+      new URL(
+        '../../node_modules/@fontsource/roboto-mono/files/roboto-mono-latin-400-normal.woff',
+        import.meta.url,
+      ),
+    ).then((res) => res.arrayBuffer());
+
     // @ts-ignore
     const svg = await satori(template, {
       width: 1200,
@@ -38,7 +43,7 @@ const generateImage = async (data: any) => {
       fonts: [
         {
           name: 'Roboto',
-          data: ttf,
+          data: await robotoMono400,
           weight: 400,
           style: 'normal',
         },

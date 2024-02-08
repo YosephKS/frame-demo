@@ -17,6 +17,7 @@
   "dependencies": {
     "@airstack/node": "^0.0.5",
     "@coinbase/onchainkit": "^0.5.1",
+    "@fontsource/roboto-mono": "^5.0.16",
     "@thirdweb-dev/storage": "^2.0.9",
     "bufferutil": "^4.0.8",
     "graphql-request": "^6.1.0",
