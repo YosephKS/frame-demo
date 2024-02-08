@@ -1,9 +1,11 @@
 import { FrameRequest } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
 import { SUCCESS_CLAIM_IMAGE_URL } from '../../lib/constants';
-import { gql, GraphQLClient } from 'graphql-request';
+import { init, fetchQuery } from '@airstack/node';
 
-const query = gql`
+init(process.env.AIRSTACK_API_KEY ?? '');
+
+const query = /* GraphQL */ `
   query MyQuery($upFid: String!, $downFid: String!) {
     up: Socials(input: { filter: { userId: { _eq: $upFid } }, blockchain: ethereum }) {
       Social {
@@ -18,28 +20,16 @@ const query = gql`
   }
 `;
 
-const AIRSTACK_API_URL = 'https://api.airstack.xyz/graphql';
-const AIRSTACK_API_KEY = process.env.AIRSTACK_API_KEY;
-
-if (!AIRSTACK_API_KEY) throw new Error('AIRSTACK_API_KEY not set');
-
-const graphQLClient = new GraphQLClient(AIRSTACK_API_URL, {
-  headers: {
-    Authorization: AIRSTACK_API_KEY,
-  },
-});
-
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   const body: FrameRequest = await req.json();
   const { fid } = body?.untrustedData ?? {};
   const upFid = (fid + 1).toString();
   const downFid = (fid - 1).toString();
-  try {
-    const data: any = await graphQLClient.request(query, { upFid, downFid });
-    // const { data, error } = await fetchQuery(query, { upFid, downFid });
+  const { data, error } = await fetchQuery(query, { upFid, downFid });
+  if (!error) {
     const up = data?.up?.Social?.[0]?.profileName;
     const down = data?.down?.Social?.[0]?.profileName;
-    console.log(JSON.stringify(data));
+    console.log(data);
     return new NextResponse(`
         <!DOCTYPE html>
           <html>
@@ -55,8 +45,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           </head>
         </html>
     `);
-  } catch (e) {
-    console.error(e);
+  } else {
+    console.error(error);
     return new NextResponse(`
         <!DOCTYPE html>
           <html>
