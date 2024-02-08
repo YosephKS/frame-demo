@@ -1,9 +1,10 @@
 import { FrameRequest } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
 import { SUCCESS_CLAIM_IMAGE_URL } from '../../lib/constants';
-import { init, fetchQuery } from '@airstack/node';
+import fetch from 'node-fetch';
 
-init(process.env.AIRSTACK_API_KEY ?? '');
+const AIRSTACK_API_URL = 'https://app.airstack.xyz/graphql';
+const AIRSTACK_API_KEY = process.env.AIRSTACK_API_KEY;
 
 const query = /* GraphQL */ `
   query MyQuery($upFid: String!, $downFid: String!) {
@@ -25,10 +26,18 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const { fid } = body?.untrustedData ?? {};
   const upFid = (fid + 1).toString();
   const downFid = (fid - 1).toString();
-  const res = await fetchQuery(query, { upFid: '1', downFid: '3' });
-  const { data, error } = res;
+  const res = await fetch(AIRSTACK_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: AIRSTACK_API_KEY ?? '',
+    },
+    body: JSON.stringify({ query, variables: { upFid: '1', downFid: '3' } }),
+  });
+  const json = await res?.json();
+  const data = (json as { data?: any })?.data;
   console.log(res);
-  if (!error) {
+  try {
     const up = data?.up?.Social?.[0]?.profileName;
     const down = data?.down?.Social?.[0]?.profileName;
     return new NextResponse(`
@@ -46,7 +55,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           </head>
         </html>
     `);
-  } else {
+  } catch (error) {
     console.error(error);
     return new NextResponse(`
         <!DOCTYPE html>
