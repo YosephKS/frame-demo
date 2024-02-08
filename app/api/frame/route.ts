@@ -39,7 +39,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     // const { data, error } = await fetchQuery(query, { upFid, downFid });
     const up = data?.up?.Social?.[0]?.profileName;
     const down = data?.down?.Social?.[0]?.profileName;
-    console.log(data);
+    console.log(JSON.stringify(data));
     return new NextResponse(`
         <!DOCTYPE html>
           <html>
@@ -56,6 +56,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         </html>
     `);
   } catch (e) {
+    console.error(e);
     return new NextResponse(`
         <!DOCTYPE html>
           <html>
