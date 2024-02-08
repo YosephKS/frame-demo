@@ -857,6 +857,7 @@ export type Social = {
   profileUrl: Maybe<Scalars['String']['output']>;
   tokenNft: Maybe<TokenNft>;
   twitterUserName: Maybe<Scalars['String']['output']>;
+  updatedAt: Maybe<Scalars['Time']['output']>;
   userAddress: Maybe<Scalars['Address']['output']>;
   userAddressDetails: Maybe<Wallet>;
   userAssociatedAddressDetails: Maybe<Array<Wallet>>;
@@ -917,6 +918,7 @@ export type SocialFilter = {
   isDefault: InputMaybe<Boolean_Comparator_Exp>;
   profileCreatedAtBlockTimestamp: InputMaybe<Time_Comparator_Exp>;
   profileName: InputMaybe<Regex_String_Comparator_Exp>;
+  updatedAt: InputMaybe<Time_Comparator_Exp>;
   userAssociatedAddresses: InputMaybe<Address_Comparator_Exp>;
   userId: InputMaybe<String_Comparator_Exp>;
 };
@@ -1029,6 +1031,7 @@ export type SocialOrderBy = {
   followerCount: InputMaybe<OrderBy>;
   followingCount: InputMaybe<OrderBy>;
   profileCreatedAtBlockTimestamp: InputMaybe<OrderBy>;
+  updatedAt: InputMaybe<OrderBy>;
 };
 
 export type SocialsInput = {
@@ -1560,7 +1563,7 @@ export type XmtPsOutput = {
 };
 
 export type FetchAssociatedAddressQueryQueryVariables = Exact<{
-  address: Scalars['String']['input'];
+  profileName: Scalars['String']['input'];
 }>;
 
 

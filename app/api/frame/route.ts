@@ -26,6 +26,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   const upFid = (fid + 1).toString();
   const downFid = (fid - 1).toString();
   const { data, error } = await fetchQuery(query, { upFid, downFid });
+  console.log(data, error, fid);
   if (!error) {
     const up = data?.up?.Social?.[0]?.profileName;
     const down = data?.down?.Social?.[0]?.profileName;
