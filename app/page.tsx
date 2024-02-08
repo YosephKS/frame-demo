@@ -4,7 +4,7 @@ import { INITIAL_IMAGE_URL } from './lib/constants';
 
 const frameMetadata = getFrameMetadata({
   buttons: [{ label: 'Find your FC neighbours!', action: 'post' }],
-  image: INITIAL_IMAGE_URL,
+  image: 'https://gateway.ipfs.io/ipfs/QmSho42fWi25oBWp5MrrFH9zUGFvnspxVHvcymNJoe3DEZ/output.png',
   post_url: 'https://frame-demo-seven.vercel.app/api/frame',
 });
 
