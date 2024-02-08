@@ -1,20 +1,32 @@
 import { FrameRequest } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
-import { SUCCESS_CLAIM_IMAGE_URL } from '../../lib/constants';
 import { init, fetchQuery } from '@airstack/node';
+import generateImage from '../../lib/generateImage';
 
 init(process.env.AIRSTACK_API_KEY ?? '');
 
 const query = /* GraphQL */ `
   query MyQuery($upFid: String!, $downFid: String!) {
-    up: Socials(input: { filter: { userId: { _eq: $upFid } }, blockchain: ethereum }) {
+    up: Socials(
+      input: {
+        filter: { userId: { _eq: $upFid }, dappName: { _eq: farcaster } }
+        blockchain: ethereum
+      }
+    ) {
       Social {
         profileName
+        profileImage
       }
     }
-    down: Socials(input: { filter: { userId: { _eq: $downFid } }, blockchain: ethereum }) {
+    down: Socials(
+      input: {
+        filter: { userId: { _eq: $downFid }, dappName: { _eq: farcaster } }
+        blockchain: ethereum
+      }
+    ) {
       Social {
         profileName
+        profileImage
       }
     }
   }
@@ -30,12 +42,13 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   if (!error) {
     const up = data?.up?.Social?.[0]?.profileName;
     const down = data?.down?.Social?.[0]?.profileName;
+    const image = generateImage(data);
     return new NextResponse(`
         <!DOCTYPE html>
           <html>
             <head>
               <meta property="fc:frame" content="vNext" />
-              <meta property="fc:frame:image" content="${SUCCESS_CLAIM_IMAGE_URL}" />
+              <meta property="fc:frame:image" content="${image}" />
               <meta name="fc:frame:button:1" content="@${down}" />
               <meta name="fc:frame:button:1:action" content="link" />
               <meta name="fc:frame:button:1:target" content="https://explorer.airstack.xyz/token-balances?address=fc_fid:${downFid}&rawInput=%23%E2%8E%B1fc_fid:${downFid}%E2%8E%B1%28fc_fid:${fid - 1}++ethereum+null%29&inputType=ADDRESS" />
@@ -46,7 +59,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         </html>
     `);
   } else {
-    console.error(error);
     return new NextResponse(`
         <!DOCTYPE html>
           <html>
