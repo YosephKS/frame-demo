@@ -1,7 +1,8 @@
-import { readFile } from 'fs/promises';
+import { promises as fs } from 'fs';
 import satori from 'satori';
 import { html } from 'satori-html';
-import svg2png from 'svg2png';
+
+const sharp = require('sharp');
 import { ThirdwebStorage } from '@thirdweb-dev/storage';
 import { config } from 'dotenv';
 
@@ -12,39 +13,47 @@ const storage = new ThirdwebStorage({
 });
 
 const generateImage = async (data: any) => {
-  const { up, down } = data ?? {};
-  const template = html(`
+  try {
+    const { up, down } = data ?? {};
+    const template = html(`
   <div style="display: flex; flex-direction: column; height: 100%; width: 100%; background-color: #000; color: #fff; font-size: 32; font-weight: 600; align-items: center; justify-content: center;" >
     <h2>Here's your FC neighbours!</h2>
     <div style="display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 100;" >
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;" >
-        <img src="${down?.Social?.[0]?.profileImage}" style="width: 250px; height: 250px; object-fit: cover; object-position: 25% 25%;" />
+        <img src="${down?.Social?.[0]?.profileImage}" width="250px" height="250px" style="object-fit: cover; object-position: 25% 25%;" />
         <p>@${down?.Social?.[0]?.profileName}</p>
         </div>
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center" >
-        <img src="${up?.Social?.[0]?.profileImage}" style="width: 250px; height: 250px; object-fit: cover; object-position: 25% 25%;" />  
+        <img src="${up?.Social?.[0]?.profileImage}" width="250px" height="250px" style="object-fit: cover; object-position: 25% 25%;" />  
         <p>@${up?.Social?.[0]?.profileName}</p>
         </div>
     </div>
     <div style="display: flex;">Powered by<img width="130px" src="https://assets-global.website-files.com/625f12b8c305bac86b872acd/64d0940ab6c6593d16483399_Airstack-logo-RGB%20-%20dark%20mode%20without%20padding.svg" style="margin-left: 12px;" /></div>
   </div>`);
-  // @ts-ignore
-  const svg = await satori(template, {
-    width: 1200,
-    height: 630,
-    fonts: [
-      {
-        name: 'Roboto',
-        data: await readFile('./Roboto/Roboto-Black.ttf'),
-        weight: 400,
-        style: 'normal',
-      },
-    ],
-  });
 
-  // @ts-ignore
-  const pngBuffer = await svg2png(svg);
-  return pngBuffer;
+    // @ts-ignore
+    const svg = await satori(template, {
+      width: 1200,
+      height: 630,
+      fonts: [
+        {
+          name: 'Roboto',
+          data: await fs.readFile(process.cwd() + '/app/lib/Roboto/Roboto-Black.ttf'),
+          weight: 400,
+          style: 'normal',
+        },
+      ],
+    });
+
+    const svgBuffer = Buffer.from(svg);
+
+    // @ts-ignore
+    const pngBuffer = await sharp(svgBuffer).png().toBuffer();
+    const upload = await storage.upload(pngBuffer);
+    return storage.resolveScheme(upload);
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 export default generateImage;

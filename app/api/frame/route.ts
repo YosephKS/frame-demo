@@ -33,8 +33,9 @@ const query = /* GraphQL */ `
 `;
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
-  const body: FrameRequest = await req.json();
-  const { fid } = body?.untrustedData ?? {};
+  // const body: FrameRequest = await req.json();
+  // const { fid } = body?.untrustedData ?? {};
+  const fid = 102;
   const upFid = (fid + 1).toString();
   const downFid = (fid - 1).toString();
   const res = await fetchQuery(query, { upFid, downFid });
@@ -42,7 +43,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   if (!error) {
     const up = data?.up?.Social?.[0]?.profileName;
     const down = data?.down?.Social?.[0]?.profileName;
-    const image = generateImage(data);
+    const image = await generateImage(data);
+    console.log(image);
     return new NextResponse(`
         <!DOCTYPE html>
           <html>
@@ -59,6 +61,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
         </html>
     `);
   } else {
+    console.error(error);
     return new NextResponse(`
         <!DOCTYPE html>
           <html>
