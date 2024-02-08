@@ -29,7 +29,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
   if (!error) {
     const up = data?.up?.Social?.[0]?.profileName;
     const down = data?.down?.Social?.[0]?.profileName;
-    console.log(up, down);
+    console.log(JSON.stringify(data));
     return new NextResponse(`
         <!DOCTYPE html>
           <html>
