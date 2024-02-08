@@ -3490,10 +3490,10 @@
   "resolved" "https://registry.npmjs.org/varint/-/varint-6.0.0.tgz"
   "version" "6.0.0"
 
-"viem@^2.5.0":
-  "integrity" "sha512-ytHXIWtlgPs4mcsGxXjJrQ25v+N4dE2hBzgCU8CVv4iXNh3PRFRgyYa7igZlmxiMVzkfSHHADOtivS980JhilA=="
-  "resolved" "https://registry.npmjs.org/viem/-/viem-2.5.0.tgz"
-  "version" "2.5.0"
+"viem@^2.5.0", "viem@^2.7.6":
+  "integrity" "sha512-43TF0VYcTeNef9dax1/BhqlRLXpAo6HAiQ68hrJ8XRhDOou73nHZEjeFl8Eai4UFFodKhu+PbRUFzuuoixOUfg=="
+  "resolved" "https://registry.npmjs.org/viem/-/viem-2.7.6.tgz"
+  "version" "2.7.6"
   dependencies:
     "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"
