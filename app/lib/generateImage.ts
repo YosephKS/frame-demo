@@ -1,8 +1,7 @@
 import { promises as fs } from 'fs';
 import satori from 'satori';
 import { html } from 'satori-html';
-
-const sharp = require('sharp');
+import puppeteer from 'puppeteer';
 import { ThirdwebStorage } from '@thirdweb-dev/storage';
 import { config } from 'dotenv';
 
@@ -20,11 +19,11 @@ const generateImage = async (data: any) => {
     <h2>Here's your FC neighbours!</h2>
     <div style="display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 100;" >
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;" >
-        <img src="${down?.Social?.[0]?.profileImage}" width="250px" height="250px" style="object-fit: cover; object-position: 25% 25%;" />
+        <img src="${down?.Social?.[0]?.profileImageContentValue?.image?.medium}" width="250px" height="250px" style="object-fit: cover; object-position: 25% 25%;" />
         <p>@${down?.Social?.[0]?.profileName}</p>
         </div>
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center" >
-        <img src="${up?.Social?.[0]?.profileImage}" width="250px" height="250px" style="object-fit: cover; object-position: 25% 25%;" />  
+        <img src="${up?.Social?.[0]?.profileImageContentValue?.image?.medium}" width="250px" height="250px" style="object-fit: cover; object-position: 25% 25%;" />  
         <p>@${up?.Social?.[0]?.profileName}</p>
         </div>
     </div>
@@ -45,10 +44,20 @@ const generateImage = async (data: any) => {
       ],
     });
 
-    const svgBuffer = Buffer.from(svg);
-
     // @ts-ignore
-    const pngBuffer = await sharp(svgBuffer).png().toBuffer();
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    // Set viewport size if necessary
+    await page.setViewport({ width: 1200, height: 630 });
+
+    // Set HTML content
+    await page.setContent(svg, {
+      waitUntil: 'networkidle0', // Wait for all network connections to finish
+    });
+    const pngBuffer = await page.screenshot();
+
+    await browser.close();
     const upload = await storage.upload(pngBuffer);
     return storage.resolveScheme(upload);
   } catch (e) {

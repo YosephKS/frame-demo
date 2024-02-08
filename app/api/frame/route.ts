@@ -15,7 +15,11 @@ const query = /* GraphQL */ `
     ) {
       Social {
         profileName
-        profileImage
+        profileImageContentValue {
+          image {
+            medium
+          }
+        }
       }
     }
     down: Socials(
@@ -26,16 +30,19 @@ const query = /* GraphQL */ `
     ) {
       Social {
         profileName
-        profileImage
+        profileImageContentValue {
+          image {
+            medium
+          }
+        }
       }
     }
   }
 `;
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
-  // const body: FrameRequest = await req.json();
-  // const { fid } = body?.untrustedData ?? {};
-  const fid = 102;
+  const body: FrameRequest = await req.json();
+  const { fid } = body?.untrustedData ?? {};
   const upFid = (fid + 1).toString();
   const downFid = (fid - 1).toString();
   const res = await fetchQuery(query, { upFid, downFid });
